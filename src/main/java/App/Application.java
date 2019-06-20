@@ -21,6 +21,7 @@ public class Application {
 	private static ObjetDateTime dateTime;
 	private static String saisie;
 	private static int filtre;
+	private static String startGame;
 
 	public static void main(String[] args) {
 		date = new ObjetDate();
@@ -31,10 +32,10 @@ public class Application {
 	}
 
 	public static void initMenu() {
-		while (choix != 5) {
+		while (choix != 6) {
 			System.out.println("\nMENU DATE-TIME" + "\n-----------\n");
 			System.out.println("1) Saisir une date " + "\n2) Saisir un temps " + "\n3) Saisir un DateTime "
-					+ "\n4) Afficher un des éléments" + "\n5) Quitter");
+					+ "\n4) Afficher un des éléments" + "\n5) Minijeu : deviner le temps écoulé !" + "\n6) Quitter");
 			choix = sc.nextInt();
 
 			switch (choix) {
@@ -62,9 +63,15 @@ public class Application {
 			case 4:
 				initSousMenu();
 				break;
+
 			case 5:
+				initJeu();
+				break;
+
+			case 6:
 				System.out.println("\nMerci et à bientôt !");
 				break;
+
 			default:
 				System.out.println("\nChoix non reconnu !");
 			}
@@ -214,4 +221,36 @@ public class Application {
 		}
 	}
 
+	public static void initJeu() {
+		System.out.println(
+				"\nLe programme va lancer un chronomètre pendant un temps aléatoire. A la fin de ce temps, ce sera à vous de deviner combien de temps s'est écoulé !");
+		System.out.println("\nSi vous êtes prêt à démarrer, saisir 'OK'.");
+		sc.nextLine();
+		startGame = sc.nextLine();
+
+		if (startGame.equals("OK")) {
+			System.out.println("Déclenchement du chrono...");
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("GO!");
+			int random = (int) (Math.random() * 10 + 1);
+			try {
+				Thread.sleep(random * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("\nFINI!" + "\nCombien de secondes pensez-vous s'est écoulé : ");
+			choix = sc.nextInt();
+
+			if (choix == random) {
+				System.out
+						.println("Vous avez trouvé la bonne réponse! Il s'est bien écoulé : " + random + " secondes !");
+			} else {
+				System.out.println("Mauvaise réponse ! Il s'est écoulé : " + random + " secondes ! ");
+			}
+		}
+	}
 }
