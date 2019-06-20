@@ -1,8 +1,14 @@
 package App;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -32,10 +38,13 @@ public class Application {
 	}
 
 	public static void initMenu() {
-		while (choix != 6) {
+		while (choix != 9) {
 			System.out.println("\nMENU DATE-TIME" + "\n-----------\n");
 			System.out.println("1) Saisir une date " + "\n2) Saisir un temps " + "\n3) Saisir un DateTime "
-					+ "\n4) Afficher un des éléments" + "\n5) Minijeu : deviner le temps écoulé !" + "\n6) Quitter");
+					+ "\n4) Afficher un des éléments" + "\n5) Afficher la différence entre deux Date/Time/DateTime"
+					+ "\n6) Afficher la DateTime actuelle dans une autre zone géographique"
+					+ "\n7) Afficher la DateTime actuelle modifiée" + "\n8) Minijeu : deviner le temps écoulé !"
+					+ "\n9) Quitter");
 			choix = sc.nextInt();
 
 			switch (choix) {
@@ -61,14 +70,84 @@ public class Application {
 				break;
 
 			case 4:
-				initSousMenu();
+				initSousMenuAffichage();
 				break;
 
 			case 5:
-				initJeu();
+				System.out.println("\nQuelle différence souhaitez-vous calculer et afficher?");
+				System.out.println("1) Deux Date" + "\n2) Deux Time" + "\n3) Deux DateTime");
+				choix = sc.nextInt();
+
+				switch (choix) {
+				case 1:
+					if (date.getDates().isEmpty()) {
+						System.out.println("Il n'y a aucune date d'enregistrée");
+						break;
+					}
+					date.getDates().stream().forEach(date -> System.out.println(date));
+					System.out.println("\nChoisissez deux dates pour la calcul : ");
+					System.out.println("Choix 1 (dd/MM/yyyy) : ");
+					sc.nextLine();
+					saisie = sc.nextLine();
+					LocalDate date1 = LocalDate.parse(saisie, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+					System.out.println("Choix 2 (dd/MM/yyyy) : ");
+					saisie = sc.nextLine();
+					LocalDate date2 = LocalDate.parse(saisie, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+					System.out.println("La différence entre les deux dates est de : " + Period.between(date1, date2));
+					break;
+				case 2:
+					if (time.getTimes().isEmpty()) {
+						System.out.println("Il n'y a aucun temps d'enregistré");
+						break;
+					}
+					time.getTimes().stream().forEach(time -> System.out.println(time));
+					System.out.println("\nChoisissez deux times pour le calcul :");
+					System.out.println("Choix 1 (HH:mm:ss) : ");
+					sc.nextLine();
+					saisie = sc.nextLine();
+					LocalTime time1 = LocalTime.parse(saisie, DateTimeFormatter.ofPattern("HH:mm:ss"));
+					System.out.println("Choix 2 (HH:mm:ss) : ");
+					saisie = sc.nextLine();
+					LocalTime time2 = LocalTime.parse(saisie, DateTimeFormatter.ofPattern("HH:mm:ss"));
+					System.out.println("La différence entre les deux temps est de : " + Duration.between(time1, time2));
+					break;
+				case 3:
+					if (dateTime.getDatetime().isEmpty()) {
+						System.out.println("Il n'y a aucun DateTime d'enregistré");
+						break;
+					}
+					dateTime.getDatetime().stream().forEach(dateTime -> System.out.println(dateTime));
+					System.out.println("\nChoisissez deux dateTimes pour le calcul : ");
+					System.out.println("Choix 2 (dd/MM/yyyy HH:mm:ss) : ");
+					sc.nextLine();
+					saisie = sc.nextLine();
+					LocalDateTime ldt1 = LocalDateTime.parse(saisie,
+							DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+					System.out.println("Choix 2 (dd/MM/yyyy HH:mm:ss) : ");
+					saisie = sc.nextLine();
+					LocalDateTime ldt2 = LocalDateTime.parse(saisie,
+							DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+					System.out.println("La différence entre les deux temps est de : " + Duration.between(ldt1, ldt2));
+				}
 				break;
 
 			case 6:
+				System.out.println("Veuillez saisir l'identifiant de la zone dont vous souhaitez obtenir l'heure : ");
+				sc.nextLine();
+				String zoneId = sc.nextLine();
+				ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of(zoneId));
+				System.out.println(zdt);
+				break;
+
+			case 7:
+				initSousMenuModification();
+				break;
+
+			case 8:
+				initJeu();
+				break;
+
+			case 9:
 				System.out.println("\nMerci et à bientôt !");
 				break;
 
@@ -78,7 +157,7 @@ public class Application {
 		}
 	}
 
-	public static void initSousMenu() {
+	public static void initSousMenuAffichage() {
 		while (choix != 0) {
 			System.out.println("\nQuels éléments souhaitez-vous afficher ?\n" + "1) Les dates saisies"
 					+ "\n2) Les temps saisis" + "\n3) Les DateTime saisis" + "\n0) Revenir au menu principal");
@@ -252,5 +331,36 @@ public class Application {
 				System.out.println("Mauvaise réponse ! Il s'est écoulé : " + random + " secondes ! ");
 			}
 		}
+	}
+
+	public static void initSousMenuModification() {
+		System.out.println("\nQuel paramètre souhaitez-vous modifier ?");
+		System.out.println("1) L'année" + "\n2) Le mois" + "\n3) Le jour" + "\n4) L'heure" + "\n5) Les minutes"
+				+ "\n6) Les secondes");
+		choix = sc.nextInt();
+		ChronoUnit cu = null;
+		switch (choix) {
+		case 1:
+			cu = ChronoUnit.YEARS;
+			break;
+		case 2:
+			cu = ChronoUnit.MONTHS;
+			break;
+		case 3:
+			cu = ChronoUnit.DAYS;
+			break;
+		case 4:
+			cu = ChronoUnit.HOURS;
+			break;
+		case 5:
+			cu = ChronoUnit.MINUTES;
+			break;
+		case 6:
+			cu = ChronoUnit.SECONDS;
+			break;
+		}
+		System.out.println("\nCombien souhaitez-vous ajouter/retirer ?");
+		choix = sc.nextInt();
+		System.out.println("Voici la date actuelle modifiée : " + LocalDateTime.now().plus(choix, cu));
 	}
 }
