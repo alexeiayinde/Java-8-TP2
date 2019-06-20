@@ -60,43 +60,8 @@ public class Application {
 				break;
 
 			case 4:
-				while (choix != 0) {
-					System.out.println("\nQuels éléments souhaitez-vous afficher ?\n" + "1) Les dates saisies"
-							+ "\n2) Les temps saisis" + "\n3) Les DateTime saisis" + "\n0) Revenir au menu principal");
-					choix = sc.nextInt();
-
-					if (choix == 0)
-						break;
-
-					switch (choix) {
-					case 1:
-						System.out.println("\nSouhaitez-vous effectuer un tri/filtre avant affichage des éléments ?"
-								+ "\n1) Aucun tri/filtre" + "\n2) Tri sur la date" + "\n3) Filtre sur l'année"
-								+ "\n4) Filtre sur le mois" + "\n5) Filtre sur le jour");
-						choix2 = sc.nextInt();
-						trierDate(date.getDates());
-						break;
-					case 2:
-						System.out.println("\nSouhaitez-vous effectuer un tri/filtre avant affichage des éléments ?"
-								+ "\n1) Aucun tri/filtre" + "\n2) Tri sur le temps" + "\n3) Filtre sur l'heure"
-								+ "\n4) Filtre sur les minutes" + "\n5) Filtre sur les secondes");
-						choix2 = sc.nextInt();
-						trierTime(time.getTimes());
-						break;
-					case 3:
-						System.out.println("\nSouhaitez-vous effectuer un tri/filtre avant affichage des éléments ?"
-								+ "\n1) Aucun tri/filtre" + "\n2) Tri sur la date" + "\n3) Filtre sur l'année"
-								+ "\n4) Filtre sur le mois" + "\n5) Filtre sur le jour" + "\n6) Filtre sur l'heure"
-								+ "\n7) Filtre sur les minutes" + "\n8) Filtre sur les secondes");
-						choix2 = sc.nextInt();
-						trierDateTime(dateTime.getDatetime());
-						break;
-					default:
-						System.out.println("\nChoix non reconnu !");
-					}
-				}
+				initSousMenu();
 				break;
-
 			case 5:
 				System.out.println("\nMerci et à bientôt !");
 				break;
@@ -104,6 +69,45 @@ public class Application {
 				System.out.println("\nChoix non reconnu !");
 			}
 		}
+	}
+
+	public static void initSousMenu() {
+		while (choix != 0) {
+			System.out.println("\nQuels éléments souhaitez-vous afficher ?\n" + "1) Les dates saisies"
+					+ "\n2) Les temps saisis" + "\n3) Les DateTime saisis" + "\n0) Revenir au menu principal");
+			choix = sc.nextInt();
+
+			if (choix == 0)
+				break;
+
+			switch (choix) {
+			case 1:
+				System.out.println("\nSouhaitez-vous effectuer un tri/filtre avant affichage des éléments ?"
+						+ "\n1) Aucun tri/filtre" + "\n2) Tri sur la date" + "\n3) Filtre sur l'année"
+						+ "\n4) Filtre sur le mois" + "\n5) Filtre sur le jour");
+				choix2 = sc.nextInt();
+				trierDate(date.getDates());
+				break;
+			case 2:
+				System.out.println("\nSouhaitez-vous effectuer un tri/filtre avant affichage des éléments ?"
+						+ "\n1) Aucun tri/filtre" + "\n2) Tri sur le temps" + "\n3) Filtre sur l'heure"
+						+ "\n4) Filtre sur les minutes" + "\n5) Filtre sur les secondes");
+				choix2 = sc.nextInt();
+				trierTime(time.getTimes());
+				break;
+			case 3:
+				System.out.println("\nSouhaitez-vous effectuer un tri/filtre avant affichage des éléments ?"
+						+ "\n1) Aucun tri/filtre" + "\n2) Tri sur la date" + "\n3) Filtre sur l'année"
+						+ "\n4) Filtre sur le mois" + "\n5) Filtre sur le jour" + "\n6) Filtre sur l'heure"
+						+ "\n7) Filtre sur les minutes" + "\n8) Filtre sur les secondes");
+				choix2 = sc.nextInt();
+				trierDateTime(dateTime.getDatetime());
+				break;
+			default:
+				System.out.println("\nChoix non reconnu !");
+			}
+		}
+
 	}
 
 	public static void trierDate(ArrayList<LocalDate> liste) {
